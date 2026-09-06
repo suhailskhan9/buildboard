@@ -9,3 +9,13 @@ export async function createTaskController(req, res) {
 
     return res.status(201).json(task);
 };
+
+export async function getTasksController(req, res) {
+    const { projectId } = req.params;
+    const userId = req.user.id;
+    const { page, limit, status, assigned_to_id, search } = req.validatedQuery;
+
+    const tasks = await taskService.getTasks({ projectId, userId, page, limit, status, assignedToId: assigned_to_id, search });
+
+    return res.status(200).json(tasks)
+}

@@ -24,3 +24,24 @@ export async function createTask({projectId, userId, taskData}) {
 
     return task;
 }   
+
+export async function getTasks({ projectId, userId, page, limit, status, assignedToId, search}){
+    const membership = await projectMemberRepository.getMembership({ projectId, userId})
+
+    if(!membership) {
+        throw new AppError(404, "Project not found");
+    }
+
+    const offset = (page - 1) * limit;
+
+    const result = await taskRepository.getTasks({ projectId, limit, offset, status, assignedToId, search });
+
+    const totalPages = Math.ceil(result.total / limit);
+
+    return {
+        data: result.tasks,
+        pagination: {
+            page, limit, total: result.total, totalPages
+        }
+    }
+}

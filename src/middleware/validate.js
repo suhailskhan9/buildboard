@@ -9,7 +9,11 @@ export default function validate(schema, source="body") {
             })
         }
 
-        req[source] = result.data;
+        if(source === "query"){
+            req.validatedQuery = result.data;
+        } else{
+            req[source] = result.data;
+        }
         next();
     }
 }

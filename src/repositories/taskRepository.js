@@ -8,3 +8,52 @@ export async function createTask({ projectId, taskData }){
 
     return result.rows[0];
 }
+
+export async function getTasks({ projectId, limit, offset, status, assignedToId, search}) {
+    let whereClause = `WHERE project_id = $1`;
+
+    const values = [projectId];
+    let parameterIndex = 2;
+
+    if (status !== undefined) {
+        whereClause += ` AND status = $${parameterIndex}`;
+        values.push(status);
+        parameterIndex++;
+    }
+
+    if (assignedToId !== undefined) {
+        whereClause += ` AND assigned_to_id = $${parameterIndex}`;
+        values.push(assignedToId);
+        parameterIndex++;
+    }
+
+    if (search !== undefined) {
+        whereClause += `
+            AND (
+                title ILIKE $${parameterIndex}
+                OR description ILIKE $${parameterIndex}
+            )
+        `;
+        values.push(`%${search}%`);
+        parameterIndex++;
+    }
+
+    const query = `SELECT * FROM tasks ${whereClause}
+        ORDER BY created_at DESC
+        LIMIT $${parameterIndex}
+        OFFSET $${parameterIndex + 1}
+    `;
+
+    const taskValues = [...values, limit, offset]
+
+    const result = await pool.query(query, taskValues);
+
+    const countQuery = `SELECT COUNT(*) AS total FROM tasks ${whereClause}`;
+
+    const countResult = await pool.query(countQuery, values);
+
+    return {
+        tasks: result.rows,
+        total: Number(countResult.rows[0].total)
+    };
+}
