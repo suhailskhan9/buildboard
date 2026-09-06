@@ -19,3 +19,12 @@ export async function getTasksController(req, res) {
 
     return res.status(200).json(tasks)
 }
+
+export async function getTaskByIdController(req, res) {
+    const { projectId, taskId } = req.params;
+    const userId = req.user.id;
+
+    const task = await taskService.getTaskById({ projectId, taskId, userId});
+
+    return res.status(200).json(task);
+}

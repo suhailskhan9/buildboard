@@ -57,3 +57,10 @@ export async function getTasks({ projectId, limit, offset, status, assignedToId,
         total: Number(countResult.rows[0].total)
     };
 }
+
+
+export async function getTaskById({ projectId, taskId }) {
+    const result = await pool.query(`SELECT * FROM tasks WHERE id = $1 AND project_id = $2`, [taskId, projectId]);
+    return result.rows[0];
+}
+

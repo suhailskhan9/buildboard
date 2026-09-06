@@ -45,3 +45,20 @@ export async function getTasks({ projectId, userId, page, limit, status, assigne
         }
     }
 }
+
+
+export async function getTaskById({ projectId, taskId, userId }) {
+    const membership = await projectMemberRepository.getMembership({ projectId, userId });
+    
+    if(!membership) {
+        throw new AppError(404, "Project not found")
+    }
+
+    const task = await taskRepository.getTaskById({ projectId, taskId });
+
+    if(!task) {
+        throw new AppError(404, "Task not found");
+    }
+
+    return task;
+}

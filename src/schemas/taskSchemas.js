@@ -15,3 +15,8 @@ export const getTasksSchema = z.object({
     assigned_to_id: z.coerce.number().int().positive().optional(),
     search: z.string().trim().min(1).max(100).optional() 
 }).strict();
+
+export const getTaskByIdParamsSchema = z.object({
+    projectId: z.coerce.number().int().positive(),
+    taskId: z.coerce.number().int().positive()
+}).strict();
