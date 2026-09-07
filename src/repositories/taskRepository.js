@@ -64,3 +64,46 @@ export async function getTaskById({ projectId, taskId }) {
     return result.rows[0];
 }
 
+export async function updateTask({ projectId, taskId, taskData }) {
+    const fields = [];
+    const values = []
+
+    let paramIndex = 1;
+
+    if(taskData.title !== undefined) {
+        fields.push(`title = $${paramIndex}`)
+        values.push(taskData.title)
+        paramIndex++;
+    }
+
+    if(taskData.description !== undefined) {
+        fields.push(`description = $${paramIndex}`)
+        values.push(taskData.description)
+        paramIndex++;
+    }
+
+    if(taskData.assigned_to_id !== undefined) {
+        fields.push(`assigned_to_id = $${paramIndex}`);
+        values.push(taskData.assigned_to_id);
+        paramIndex++;
+    }
+
+    if(taskData.status !== undefined) {
+        fields.push(`status = $${paramIndex}`);
+        values.push(taskData.status);
+        paramIndex++;
+    }
+
+    if(taskData.due_date !== undefined) {
+        fields.push(`due_date = $${paramIndex}`);
+        values.push(taskData.due_date);
+        paramIndex++;
+    }
+
+    fields.push(`updated_at = CURRENT_TIMESTAMP`);
+    values.push(taskId, projectId);
+
+    const result = await pool.query(`UPDATE tasks SET ${fields.join(", ")} WHERE id = $${paramIndex} AND project_id = $${paramIndex+1} RETURNING *`, values);
+
+    return result.rows[0];
+}

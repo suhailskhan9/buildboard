@@ -20,3 +20,21 @@ export const getTaskByIdParamsSchema = z.object({
     projectId: z.coerce.number().int().positive(),
     taskId: z.coerce.number().int().positive()
 }).strict();
+
+export const updateTaskSchema = z.object({
+    title: z.string().trim().min(3).max(50).optional(),
+    description: z.string().trim().max(1000).optional(),
+    assigned_to_id: z.coerce.number().int().positive().nullable().optional(),
+    status: z.enum(["todo", "in_progress", "done"]).optional(),
+    due_date: z.iso.date().nullable().optional()
+}).strict().refine(
+    (data) => Object.keys(data).length > 0,
+    {
+        message: "At least one field must be provided for update"
+    }
+)
+
+export const updateTaskParamsSchema = z.object({
+    projectId: z.coerce.number().int().positive(),
+    taskId: z.coerce.number().int().positive()
+}).strict();

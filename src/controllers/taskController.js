@@ -28,3 +28,13 @@ export async function getTaskByIdController(req, res) {
 
     return res.status(200).json(task);
 }
+
+export async function updateTaskController(req, res) {
+    const { projectId, taskId } = req.params;
+    const userId = req.user.id;
+    const taskData = req.body;
+
+    const task = await taskService.updateTask({ projectId, taskId, userId, taskData })
+
+    return res.status(200).json(task);
+}
