@@ -1,7 +1,7 @@
 import express from 'express';
 import validate from '../middleware/validate.js';
-import { createTaskController, getTasksController, getTaskByIdController, updateTaskController } from '../controllers/taskController.js';
-import { createTaskSchema, getTaskByIdParamsSchema, getTasksSchema, updateTaskSchema, updateTaskParamsSchema } from '../schemas/taskSchemas.js';
+import { createTaskController, getTasksController, getTaskByIdController, updateTaskController, deleteTaskController } from '../controllers/taskController.js';
+import { createTaskSchema, getTaskByIdParamsSchema, getTasksSchema, updateTaskSchema, updateTaskParamsSchema, deleteTaskParamsSchema } from '../schemas/taskSchemas.js';
 import { projectIdSchema } from '../schemas/projectSchemas.js';
 
 
@@ -14,4 +14,6 @@ tasksRouter.get('/:projectId/tasks', validate(projectIdSchema, "params"), valida
 tasksRouter.get('/:projectId/tasks/:taskId', validate(getTaskByIdParamsSchema, "params"), getTaskByIdController)
 
 tasksRouter.patch('/:projectId/tasks/:taskId', validate(updateTaskParamsSchema, "params"), validate(updateTaskSchema), updateTaskController)
+
+tasksRouter.delete('/:projectId/tasks/:taskId', validate(deleteTaskParamsSchema, "params"), deleteTaskController)
 export default tasksRouter;

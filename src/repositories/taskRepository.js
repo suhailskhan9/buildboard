@@ -105,5 +105,10 @@ export async function updateTask({ projectId, taskId, taskData }) {
 
     const result = await pool.query(`UPDATE tasks SET ${fields.join(", ")} WHERE id = $${paramIndex} AND project_id = $${paramIndex+1} RETURNING *`, values);
 
+    return result.rows[0];  
+}
+
+export async function deleteTask({ projectId, taskId }) {
+    const result = await pool.query(`DELETE FROM tasks WHERE id = $1 AND project_id = $2 RETURNING *`, [taskId, projectId]);
     return result.rows[0];
 }

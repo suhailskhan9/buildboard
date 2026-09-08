@@ -38,3 +38,9 @@ export const updateTaskParamsSchema = z.object({
     projectId: z.coerce.number().int().positive(),
     taskId: z.coerce.number().int().positive()
 }).strict();
+
+export const deleteTaskParamsSchema = z.object({
+    projectId: z.coerce.number().int().positive(),
+    taskId: z.coerce.number().int().positive()
+}).strict();
+

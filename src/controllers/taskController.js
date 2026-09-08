@@ -38,3 +38,15 @@ export async function updateTaskController(req, res) {
 
     return res.status(200).json(task);
 }
+
+export async function deleteTaskController(req, res) {
+    const { projectId, taskId } = req.params;
+    const userId = req.user.id;
+    
+    const task = await taskService.deleteTask({ projectId, taskId, userId })
+
+    return res.status(200).json({
+        message: "task deleted successfully",
+        task
+    });
+}

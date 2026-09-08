@@ -92,3 +92,25 @@ export async function updateTask({ projectId, taskId, userId, taskData }){
 
     return updatedTask;
 }
+
+export async function deleteTask({ projectId, taskId, userId }) {
+    const membership = await projectMemberRepository.getMembership({ projectId, userId });
+    
+    if(!membership) {
+        throw new AppError(404, "Project not found");
+    }
+
+    if(membership.role !== "owner") {
+        throw new AppError(403, "Not allowed to delete task");
+    }
+
+    const task = await taskRepository.getTaskById({ projectId, taskId });
+
+    if(!task) {
+        throw new AppError(404, "Task not found");
+    }
+
+    const deletedTask = await taskRepository.deleteTask({ projectId, taskId });
+
+    return deletedTask;
+}
