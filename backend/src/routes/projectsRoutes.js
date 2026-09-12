@@ -4,6 +4,7 @@ import validate from '../middleware/validate.js';
 import { projectIdSchema, createProjectSchema, updateProjectSchema } from '../schemas/projectSchemas.js';
 import { createProjectController, deleteProjectController, getAllProjectsController, getProjectByIdController, updateProjectController } from '../controllers/projectController.js';
 import tasksRouter from './tasksRoutes.js';
+import projectMemberRouter from './projectMemberRoutes.js';
 
 const projectsRouter = express.Router()
 
@@ -20,5 +21,7 @@ projectsRouter.patch("/:projectId", validate(projectIdSchema, "params"), validat
 projectsRouter.delete("/:projectId", validate(projectIdSchema, "params"), deleteProjectController);
 
 projectsRouter.use('/', tasksRouter);
+
+projectsRouter.use('/', projectMemberRouter);
 
 export default projectsRouter;

@@ -18,3 +18,8 @@
 
         return result.rows[0];
     }
+
+    export async function getProjectMembers({ projectId }) {
+        const result = await pool.query(`SELECT u.id, u.username, u.email, pm.role FROM project_members pm JOIN users u ON pm.user_id = u.id WHERE pm.project_id = $1`, [projectId]);
+        return result.rows;
+    }
