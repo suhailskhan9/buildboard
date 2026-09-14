@@ -8,3 +8,8 @@ export const addProjectMemberSchema = z.object({
     user_id: z.coerce.number().int().positive(),
     role: z.enum(["editor", "viewer"])
 }).strict();
+
+export const removeProjectMemberParamsSchema = z.object({
+    projectId: z.coerce.number().int().positive(),
+    userId: z.coerce.number().int().positive() 
+}).strict();

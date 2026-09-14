@@ -17,3 +17,11 @@ export async function addProjectMemberController(req, res) {
     const member = await projectMemberService.addProjectMember({ projectId, userId, targetUserId, role });
     return res.status(201).json(member);
 }
+
+export async function removeProjectMemberController(req, res) {
+    const { projectId, userId: targetUserId } = req.params;
+    const userId = req.user.id;
+
+    const member = await projectMemberService.removeProjectMember({ projectId, userId, targetUserId });
+    return res.status(204).send();
+}

@@ -33,6 +33,29 @@ export async function addProjectMember({ projectId, userId, targetUserId, role }
         throw new AppError(409, "Target user already a member");
     }
 
-    const result = await projectMemberRepository.addProjectMember({projectId, userId: targetUserId, role });
-    return result;
+    const member = await projectMemberRepository.addProjectMember({projectId, userId: targetUserId, role });
+    return member;
+}
+
+export async function removeProjectMember({ projectId, userId, targetUserId}) {
+    const membership = await projectMemberRepository.getMembership({ projectId, userId });
+    if(!membership) {
+        throw new AppError(404, "Project not found");
+    }
+
+    if(membership.role !== "owner") {
+        throw new AppError(403, "Only project owners can remove members");
+    }
+
+    const targetUserMembership = await projectMemberRepository.getMembership({ projectId, userId: targetUserId });
+    if(!targetUserMembership) {
+        throw new AppError(404, "Target user is not a member of this project");
+    }
+
+    if(targetUserId === userId) {
+        throw new AppError(409, "Owner cannot remove themselves");
+    }
+
+    const member = await projectMemberRepository.removeProjectMember({ projectId, userId: targetUserId });
+    return member;
 }

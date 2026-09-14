@@ -30,3 +30,8 @@
         )
         return result.rows[0];
     }
+
+    export async function removeProjectMember({ projectId, userId }) {
+        const result = await pool.query(`DELETE FROM project_members WHERE project_id = $1 AND user_id = $2 RETURNING *`, [projectId, userId]);
+        return result.rows[0];
+    }
