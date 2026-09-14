@@ -25,3 +25,12 @@ export async function removeProjectMemberController(req, res) {
     const member = await projectMemberService.removeProjectMember({ projectId, userId, targetUserId });
     return res.status(204).send();
 }
+
+export async function updateProjectMemberController(req, res) {
+    const { projectId, userId: targetUserId } = req.params;
+    const userId = req.user.id;
+    const { role } = req.body;
+
+    const member = await projectMemberService.updateProjectMember({ projectId, userId, targetUserId, role});
+    return res.status(200).json(member);
+}

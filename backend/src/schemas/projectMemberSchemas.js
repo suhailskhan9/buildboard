@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const projectMemberParamsSchema = z.object({
+export const projectParamsSchema = z.object({
     projectId: z.coerce.number().int().positive()
 }).strict();
 
@@ -9,7 +9,11 @@ export const addProjectMemberSchema = z.object({
     role: z.enum(["editor", "viewer"])
 }).strict();
 
-export const removeProjectMemberParamsSchema = z.object({
+export const memberParamsSchema = z.object({
     projectId: z.coerce.number().int().positive(),
     userId: z.coerce.number().int().positive() 
+}).strict();
+
+export const updateProjectMemberSchema = z.object({
+    role: z.enum(["editor", "viewer"])
 }).strict();

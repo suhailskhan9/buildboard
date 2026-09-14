@@ -59,3 +59,26 @@ export async function removeProjectMember({ projectId, userId, targetUserId}) {
     const member = await projectMemberRepository.removeProjectMember({ projectId, userId: targetUserId });
     return member;
 }
+
+export async function updateProjectMember({ projectId, userId, targetUserId, role }) {
+    const membership = await projectMemberRepository.getMembership({ projectId, userId });
+    if(!membership) {
+        throw new AppError(404, "Project not found");
+    }
+
+    if(membership.role !== "owner") {
+        throw new AppError(403, "Only project owners can change member roles");
+    }
+
+    const targetUserMembership = await projectMemberRepository.getMembership({ projectId, userId: targetUserId });
+    if(!targetUserMembership) {
+        throw new AppError(404, "Target user is not a member of this project");
+    }
+
+    if(targetUserId === userId) {
+        throw new AppError(409, "Owner cannot change their own roles");
+    }
+
+    const member = await projectMemberRepository.updateProjectMember({ projectId, userId: targetUserId, role });
+    return member;
+}

@@ -35,3 +35,8 @@
         const result = await pool.query(`DELETE FROM project_members WHERE project_id = $1 AND user_id = $2 RETURNING *`, [projectId, userId]);
         return result.rows[0];
     }
+
+    export async function updateProjectMember({ projectId, userId, role }) {
+        const result = await pool.query(`UPDATE project_members SET role = $1 WHERE project_id = $2 AND user_id = $3 RETURNING *`, [role, projectId, userId]);
+        return result;
+    }
