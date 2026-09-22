@@ -46,3 +46,12 @@ export async function deleteProjectController(req, res) {
     return res.status(200).json({message: "Project deleted successfully", project: project});
 
 }
+
+export async function getProjectSummaryController(req, res) {
+    const { projectId } = req.params;
+    const userId = req.user.id;
+
+    const projectSummary = await projectService.getProjectSummary({ projectId, userId });
+
+    return res.status(200).json(projectSummary);
+}

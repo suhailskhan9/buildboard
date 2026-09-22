@@ -24,3 +24,13 @@ export async function deleteProject({ projectId, userId }) {
     const result = await pool.query("DELETE FROM projects p USING project_members pm WHERE p.id = $1 AND pm.project_id = p.id AND pm.user_id = $2 AND pm.role = 'owner' RETURNING p.*", [projectId, userId]);
     return result.rows[0];
 }
+
+export async function getProjectSummary({ projectId }) {
+    const result = await pool.query(`SELECT COUNT(*) AS total, COUNT(*) FILTER (WHERE status = 'todo') AS todo,
+                                      COUNT(*) FILTER (WHERE status = 'in_progress') AS in_progress,
+                                      COUNT(*) FILTER (WHERE status = 'done') AS done
+                                      FROM tasks
+                                      WHERE project_id = $1`, [projectId]);
+                                
+    return result.rows[0];
+}

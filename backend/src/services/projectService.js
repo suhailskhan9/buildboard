@@ -79,3 +79,14 @@ export async function deleteProject({projectId, userId}) {
 
     return project;
 }
+
+export async function getProjectSummary({ projectId, userId }) {
+    const membership = await projectMemberRepository.getMembership({ projectId, userId });
+    if(!membership) {
+        throw new AppError(404, "Project not found");
+    }
+
+    const projectSummary = await projectRepository.getProjectSummary({ projectId });
+
+    return projectSummary;
+}
