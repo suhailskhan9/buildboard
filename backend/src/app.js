@@ -1,6 +1,5 @@
 import express from "express";
 
-import authMiddleware from "./middleware/authMiddleware.js";
 import authRouter from "./routes/authRoutes.js";
 import projectsRouter from "./routes/projectsRoutes.js";
 import errorMiddleware from "./middleware/errorMiddleware.js";

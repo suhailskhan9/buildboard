@@ -1,7 +1,9 @@
 import dotenv from 'dotenv';
 import { z } from 'zod';
 
-dotenv.config();
+const envFile = process.env.NODE_ENV === "test" ? ".env.test" : ".env";
+
+dotenv.config({ path: envFile });
 
 export const config = z.object({
     port: z.coerce.number().int().positive().max(65535).default(3000),
